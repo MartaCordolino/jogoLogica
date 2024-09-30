@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Sequências Lógicas</title>
+    <style>
+        body {
+            background-color: #e6affa; /* Cor de fundo para a página */
+            margin: 0; /* Remove as margens padrão */
+            padding: 0; /* Remove o padding padrão */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: rgb(31, 22, 155);
+        }
+        h1 {
+            display: inline-block; /* Ajusta a largura ao conteúdo */
+            border: 2px solid #000; /* Define a borda */
+            padding: 10px; /* Espaço entre o texto e a borda */
+            border-radius: 8px; /* Deixa as bordas arredondadas (opcional) */
+        }
+        #game-container {
+            margin: 50px auto;
+            width: 400px;
+        }
+        .sequence-image {
+            width: 80px;
+            height: 80px;
+            margin: 5px;
+            border: 2px solid #ccc;
+        }
+        .answer-button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        .nav-button {      
+            padding: 10px 20px;
+            font-size: 16px;  
+            cursor: pointer;
+            background-color: #095db6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    
+         .nav-button:hover {      
+            background-color: #2085f1;
+       }
+    </style>
+</head>
+<body>
+
+    <h1>Figuras Geométricas</h1>
+    <div id="game-container">
+        <div id="sequence">
+            <img class="sequence-image" src="sequencias/triangulo.png" alt="Sequência 1">
+            <img class="sequence-image" src="sequencias/quadrado.png" alt="Sequência 2">
+            <img class="sequence-image" src="sequencias/pentagono.png" alt="Sequência 3">
+            <!-- O espaço da sequência que o jogador deve completar -->
+            <img class="sequence-image" src="sequencias/interrogacao.png" alt="Complete a Sequência">
+        </div>
+
+        <div id="message"></div>
+
+        <div id="answers">
+            <button class="answer-button" onclick="checkAnswer('4')"><strong>4</strong></button>
+            <button class="answer-button" onclick="checkAnswer('5')"><strong>5</strong></button>
+            <button class="answer-button" onclick="checkAnswer('6')"><strong>6</strong></button>
+        </div>
+        
+        <button id="nextButton" class="answer-button hidden" onclick="nextQuestion()"><strong>Próxima</strong></button>
+    </div>
+    <footer></footer>
+    <button class="nav-button" onclick="returnToPrevious()">Retornar</button>
+    <button class="nav-button" onclick="goToIntermediateLevel()">Avançar</button>
+</footer>
+    <script>
+        const sequences = [
+            {
+                sequenceImages: ['sequencias/triangulo.png', 'sequencias/quadrado.png', 'sequencias/pentagono.png'],
+                correctAnswer: '6' // Resposta correta agora é 6 (hexágono)
+            }
+        ];
+
+        let currentSequenceIndex = 0;
+
+        function displaySequence() {
+            const sequenceDiv = document.getElementById('sequence');
+            sequenceDiv.innerHTML = '';
+
+            sequences[currentSequenceIndex].sequenceImages.forEach(image => {
+                const img = document.createElement('img');
+                img.src = image;
+                img.className = 'sequence-image';
+                sequenceDiv.appendChild(img);
+            });
+
+            const mysteryImage = document.createElement('img');
+            mysteryImage.src = 'sequencias/interrogacao.png';
+            mysteryImage.className = 'sequence-image';
+            sequenceDiv.appendChild(mysteryImage);
+        }
+
+        function checkAnswer(answer) {
+            const correctAnswer = sequences[currentSequenceIndex].correctAnswer;
+            const messageDiv = document.getElementById('message');
+
+            if (answer === correctAnswer) {
+                messageDiv.innerHTML = "<h2 style='color:green;'>Correto! A próxima figura é o hexágono (6 lados).</h2>";
+            } else {
+                messageDiv.innerHTML = "<h2 style='color:red;'>Errado! A resposta correta é o hexágono (6 lados).</h2>";
+            }
+
+            document.getElementById('nextButton').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentSequenceIndex = (currentSequenceIndex + 1) % sequences.length;
+            displaySequence();
+            document.getElementById('message').innerHTML = "";
+            document.getElementById('nextButton').classList.add('hidden');
+        }
+
+        // Exibe a primeira sequência ao carregar a página
+        displaySequence();
+    </script>
+
+</body>
+</html>
